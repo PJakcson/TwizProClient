@@ -12,9 +12,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.twizproclient.data.Preferences;
 import com.twizproclient.data.TwitchJSONParser;
 import com.twizproclient.data.primitives.Channel;
 import com.twizproclient.data.primitives.Game;
@@ -34,16 +36,7 @@ public class MainActivity extends ActionBarActivity
         GamesRasterFragment.OnGameSelectedListener, StreamListFragment.onStreamSelectedListener,
         ChannelListFragment.onChannelSelectedListener {
 
-    private static final String PREF_USER_COMPLETED_SETUP = "user_completed_setup";
-    private static String USER_AUTH_TOKEN = "user_auth_token";
-    private static String USER_IS_AUTHENTICATED = "user_is_authenticated";
-    private static String SCOPES_OF_USER = "scopes_of_user";
-    private static String USER_HAS_TWITCH_USERNAME = "user_has_twitch_username";
-    private static String TWITCH_USERNAME = "twitch_username";
-    private static String TWITCH_DISPLAY_USERNAME = "twitch_display_username";
-    private static String TWITCH_STREAM_QUALITY_TYPE = "settings_stream_quality_type";
-    private static String TWITCH_PREFERRED_VIDEO_QUALITY = "settings_preferred_video_quality";
-    private static String TWITCH_BITMAP_QUALITY = "settings_bitmap_quality";
+    private NavigationDrawerFragment mNavigationDrawerFragment;
 
     private static final String ARG_ACTIONBAR_TITLE = "action_bar";
     private String mUrls[];
@@ -68,7 +61,7 @@ public class MainActivity extends ActionBarActivity
         AdRequest adRequest = new AdRequest.Builder().build();
         //mAdView.loadAd(adRequest);
 
-        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
 
         mNavigationDrawerFragment.setUp(
@@ -85,7 +78,7 @@ public class MainActivity extends ActionBarActivity
                 transaction = getFragmentManager().beginTransaction();
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.replace(R.id.container, mGamesRasterFragment.newInstance(mUrls[position]));
-                transaction.addToBackStack("GamesRaster");
+                transaction.addToBackStack("0");
                 transaction.commit();
                 break;
             case 1:
@@ -93,28 +86,27 @@ public class MainActivity extends ActionBarActivity
                 transaction = getFragmentManager().beginTransaction();
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.replace(R.id.container, mStreamListFragment.newInstance(mUrls[position], null));
-                transaction.addToBackStack("StreamTop");
+                transaction.addToBackStack("1");
                 transaction.commit();
                 break;
             case 2:
-//                ChannelListFragment searchFragment = new ChannelListFragment();
                 SearchFragment searchFragment = new SearchFragment();
                 transaction = getFragmentManager().beginTransaction();
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.replace(R.id.container, searchFragment);
-                transaction.addToBackStack("Search");
+                transaction.addToBackStack("2");
                 transaction.commit();
                 break;
             case 3:
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-                String req = sp.getString(TWITCH_USERNAME, "");
-                if (sp.getBoolean(USER_HAS_TWITCH_USERNAME, false) && !req.isEmpty()) {
+                String req = sp.getString(Preferences.TWITCH_USERNAME, "");
+                if (sp.getBoolean(Preferences.USER_HAS_TWITCH_USERNAME, false) && !req.isEmpty()) {
                     req = getString(R.string.twitch_user_url) + req + getString(R.string.twitch_user_following_suffix);
                     ChannelListFragment favoritesFragment = new ChannelListFragment();
                     transaction = getFragmentManager().beginTransaction();
                     transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     transaction.replace(R.id.container, favoritesFragment.newInstance(req));
-                    transaction.addToBackStack("Favorites");
+                    transaction.addToBackStack("3");
                     transaction.commit();
                 }
                 break;
@@ -128,7 +120,7 @@ public class MainActivity extends ActionBarActivity
                 transaction = getFragmentManager().beginTransaction();
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 transaction.replace(R.id.container, new SettingsFragment());
-                transaction.addToBackStack("Settings");
+                transaction.addToBackStack("6");
                 transaction.commit();
                 break;
             case 100:
@@ -146,7 +138,7 @@ public class MainActivity extends ActionBarActivity
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(this);
         String qArray[] = getResources().getStringArray(R.array.settings_bitmap_qualities);
-        String q = sp.getString(TWITCH_BITMAP_QUALITY, "");
+        String q = sp.getString(Preferences.TWITCH_BITMAP_QUALITY, "");
 
         if (q.contains(qArray[0])) TwitchJSONParser.setHighQuality();
         if (q.contains(qArray[1])) TwitchJSONParser.setMediumQuality();
@@ -156,10 +148,10 @@ public class MainActivity extends ActionBarActivity
     private void setDefaultSettings() {
         SharedPreferences sp = PreferenceManager
                 .getDefaultSharedPreferences(this);
-        sp.edit().putString(TWITCH_STREAM_QUALITY_TYPE, getString(R.string.default_stream_quality_type)).apply();
-        sp.edit().putString(TWITCH_PREFERRED_VIDEO_QUALITY, getString(R.string.default_preferred_video_quality)).apply();
+        sp.edit().putString(Preferences.TWITCH_STREAM_QUALITY_TYPE, getString(R.string.default_stream_quality_type)).apply();
+        sp.edit().putString(Preferences.TWITCH_PREFERRED_VIDEO_QUALITY, getString(R.string.default_preferred_video_quality)).apply();
         String defaultBitmap = getResources().getStringArray(R.array.settings_bitmap_qualities)[0];
-        sp.edit().putString(TWITCH_BITMAP_QUALITY, defaultBitmap).apply();
+        sp.edit().putString(Preferences.TWITCH_BITMAP_QUALITY, defaultBitmap).apply();
     }
 
     @Override
@@ -184,13 +176,33 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onBackPressed() {
         FragmentManager fm = getFragmentManager();
-        if (fm.getBackStackEntryCount() > 1) {
+        int itemCount = fm.getBackStackEntryCount();
+
+        if (itemCount > 1) {
+            synchronizeDrawer(fm.getBackStackEntryAt(itemCount-2).getName());
             fm.popBackStack();
+
         } else if (mIsInSetup) {
             mIsInSetup = false;
             startApp();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    private void synchronizeDrawer(String i) {
+        if(i == null) return;
+        try {
+            int drawer = Integer.valueOf(i);
+            switch (drawer) {
+                case 0: mNavigationDrawerFragment.selectListItem(0); break;
+                case 1: mNavigationDrawerFragment.selectListItem(1); break;
+                case 2: mNavigationDrawerFragment.selectListItem(2); break;
+                case 3: mNavigationDrawerFragment.selectListItem(3); break;
+                case 6: mNavigationDrawerFragment.selectListItem(6); break;
+            }
+        } catch (NumberFormatException e) {
+            Log.d("synchrDrawer", e.toString());
         }
     }
 
@@ -217,6 +229,7 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onGameSelected(Game g) {
+        mNavigationDrawerFragment.deselectList();
         String url = getString(R.string.game_streams_url);
         url += g.toURL() + "&";
         StreamListFragment mStreamListFragment = new StreamListFragment();
@@ -229,6 +242,7 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onStreamSelected(Stream g) {
+        mNavigationDrawerFragment.deselectList();
         ChannelDetailFragment mChannelDetailFragment = new ChannelDetailFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -239,6 +253,7 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onChannelSelected(Channel c) {
+        mNavigationDrawerFragment.deselectList();
         ChannelDetailFragment mChannelDetailFragment = new ChannelDetailFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -258,7 +273,7 @@ public class MainActivity extends ActionBarActivity
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.replace(R.id.container, mGamesRasterFragment.newInstance(mUrls[0]));
-        transaction.addToBackStack("GamesRaster");
+        transaction.addToBackStack("0");
         transaction.commit();
     }
 }

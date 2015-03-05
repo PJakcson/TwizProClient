@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import com.twizproclient.MainActivity;
 import com.twizproclient.R;
 import com.twizproclient.adapter.StreamListAdapter;
 import com.twizproclient.data.async_tasks.TwitchJSONDataThread;
@@ -77,7 +78,7 @@ public class StreamListFragment extends Fragment{
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
                 mCallback.onStreamSelected(mAdapter.getItem(position));
             }
         });

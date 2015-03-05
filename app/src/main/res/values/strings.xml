@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">TwizPro Client</string>
+    <string name="app_name">Ace</string>
     <string name="banner_ad_unit_test_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="banner_ad_unit_id">ca-app-pub-1959826266269343/9921410110</string>
 
@@ -28,6 +28,7 @@
     <string name="channel_stream_url">https://api.twitch.tv/kraken/streams/</string>
     <string name="channel_videos_url">https://api.twitch.tv/kraken/channels/</string>
     <string name="channel_broadcasts_url_appendix">broadcasts=true&amp;</string>
+    <string name="featured_streams_url">https://api.twitch.tv/kraken/streams/featured?</string>
 
     <string name="twitch_user_following_suffix">/follows/channels?</string>
 
@@ -42,6 +43,22 @@
     <string name="default_stream_quality_type">always ask</string>
     <string name="default_preferred_video_quality">source</string>
 
+    //-------------------------Settings------------------------------------------
+    <string name="settings_video_headline">Video</string>
+    <string name="settings_video_type_headline">Playback behavior</string>
+    <string name="settings_video_quality_headline">Preferred Video Quality</string>
+
+    <string name="settings_twitch_headline">Twitch</string>
+    <string name="settings_username_headline">Username</string>
+    <string name="settings_fresh_login_headline">Fresh Login</string>
+    <string name="settings_refresh_token_headline">Refresh Token</string>
+
+    <string name="settings_general_ui_headline">General UI</string>
+    <string name="settings_thumbnail_quality_headline">Thumbnail Quality</string>
+    <string name="settings_twitch_status_headline">Twitch Login Status</string>
+
+
+    //-----------------------Array-----------------------------------------------
     <string-array name="drawer_urls">
         <item>https://api.twitch.tv/kraken/games/top?</item>
         <item>https://api.twitch.tv/kraken/streams?</item>

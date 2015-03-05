@@ -38,7 +38,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import com.twizproclient.R;
-import com.twizproclient.adapter.PastBroadcastsListAdapter2;
+import com.twizproclient.adapter.PastBroadcastsListAdapter;
+import com.twizproclient.data.Preferences;
 import com.twizproclient.data.TwitchJSONParser;
 import com.twizproclient.data.TwitchNetworkTasks;
 import com.twizproclient.data.async_tasks.TwitchBroadcastThread;
@@ -84,11 +85,6 @@ public class ChannelDetailFragment extends Fragment {
     private Stream mStream;
     private TwitchUser mUser;
 
-    private static String USER_AUTH_TOKEN = "user_auth_token";
-    private static String USER_IS_AUTHENTICATED = "user_is_authenticated";
-    private static String SCOPES_OF_USER = "scopes_of_user";
-    private static String TWITCH_STREAM_QUALITY_TYPE = "settings_stream_quality_type";
-    private static String TWITCH_PREFERRED_VIDEO_QUALITY = "settings_preferred_video_quality";
     private String mUserToken, mUserScope;
     private boolean mIsAuthenticated;
 
@@ -96,7 +92,7 @@ public class ChannelDetailFragment extends Fragment {
     private TextView mStreamTitle, mStreamGameTitle, mStreamViewers, mStreamStatus;
     private String mToken, mSig;
     private ListView mVideoList;
-    private PastBroadcastsListAdapter2 mVideoListAdapter2;
+    private PastBroadcastsListAdapter mVideoListAdapter2;
     private View mStreamHeader;
     private View mChannelHeader;
     private TwitchVideo mPlayingVideo;
@@ -136,11 +132,11 @@ public class ChannelDetailFragment extends Fragment {
                 .getDefaultSharedPreferences(getActivity());
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        mIsAuthenticated = sp.getBoolean(USER_IS_AUTHENTICATED, false);
+        mIsAuthenticated = sp.getBoolean(Preferences.USER_IS_AUTHENTICATED, false);
 
         if (mIsAuthenticated) {
-            mUserToken = sp.getString(USER_AUTH_TOKEN, "");
-            mUserScope = sp.getString(SCOPES_OF_USER, "");
+            mUserToken = sp.getString(Preferences.USER_AUTH_TOKEN, "");
+            mUserScope = sp.getString(Preferences.SCOPES_OF_USER, "");
         }
 
         //mSpinner = (Spinner) rootView.findViewById(R.id.quality_spinner);
@@ -161,7 +157,7 @@ public class ChannelDetailFragment extends Fragment {
 
 
         if (mVideoListAdapter2 == null) {
-            mVideoListAdapter2 = new PastBroadcastsListAdapter2(this);
+            mVideoListAdapter2 = new PastBroadcastsListAdapter(this);
         }
 
         mVideoClicked = new AdapterView.OnItemClickListener() {
@@ -190,7 +186,7 @@ public class ChannelDetailFragment extends Fragment {
                         playSelectedVideo(mVideoListAdapter2.getBroadcast(childPos));
                         break;
                 }
-                Toast.makeText(getActivity(), "" + childPos + " Gruppe " + mVideoListAdapter2.getGroup(position) + " Position " + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "" + childPos + " Gruppe " + mVideoListAdapter2.getGroup(position) + " Position " + position, Toast.LENGTH_SHORT).show();
                 //setFullVideoLayout();
                 //playSelectedVideo(mVideoListAdapter2.getItem(position));
             }
@@ -244,7 +240,6 @@ public class ChannelDetailFragment extends Fragment {
         else {
             updateChannelLayout();
             downloadHighlightData(mLoadedItems, 0);
-            downloadBroadcastData(mLoadedItems, 0);
         }
     }
 
@@ -288,7 +283,6 @@ public class ChannelDetailFragment extends Fragment {
             mChannel = mStream.mChannel;
             updateLiveStreamLayout();
             downloadHighlightData(mLoadedItems, 0);
-            downloadBroadcastData(mLoadedItems, 0);
         }
     }
 
@@ -296,8 +290,9 @@ public class ChannelDetailFragment extends Fragment {
         if (mStream == null || mUser == null) return;
         mProgressBar.setVisibility(View.GONE);
         mStreamView.setVisibility(View.VISIBLE);
-
-        //loadLogo(mStream.mPreviewLink, mThumbnail);
+        ObjectAnimator fadeInStream = ObjectAnimator.ofFloat(mStreamView, "alpha",  0f, 1f);
+        fadeInStream.setDuration(500);
+        fadeInStream.start();
 
         Picasso.with(getActivity())
                 .load(mStream.mPreviewLink)
@@ -327,6 +322,9 @@ public class ChannelDetailFragment extends Fragment {
             ((TextView) mStreamHeader.findViewById(R.id.textTitleView)).setText(mChannel.getStatus());
             ((TextView) mStreamHeader.findViewById(R.id.textViewsView)).setText(mStream.mViewers + " Viewers");
             mVideoList.setVisibility(View.VISIBLE);
+            ObjectAnimator fadeInList = ObjectAnimator.ofFloat(mVideoList, "alpha",  0f, 1f);
+            fadeInList.setDuration(500);
+            fadeInList.start();
         }
     }
 
@@ -415,7 +413,7 @@ public class ChannelDetailFragment extends Fragment {
         if (t.bestPossibleUrl() >= 0) {
             showOldVodFragment(t);
         } else {
-            Toast.makeText(getActivity(), "Could not load Video, You need to subscribe to the channel.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Could not load Video, You may need to subscribe to the channel.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -439,6 +437,7 @@ public class ChannelDetailFragment extends Fragment {
     }
 
     public void highlightDataReceived(String s) {
+        downloadBroadcastData(mLoadedItems, 0);
         mChannel.mHighlights = TwitchJSONParser.dataToVideoList(s);
         if (mVideoListAdapter2 != null) {
             mVideoListAdapter2.updateHighlights(mChannel.mHighlights);
@@ -472,7 +471,7 @@ public class ChannelDetailFragment extends Fragment {
         if (mSavedBroadcasts == null) mSavedBroadcasts = (ArrayList<TwitchVideo>) mVideoListAdapter2.getBroadcasts().clone();
 
         ViewGroup.LayoutParams p1 = rootView.getLayoutParams();
-        p1.height = rootView.getMeasuredHeight() + mStreamView.getMeasuredHeight();
+        p1.height = getWindowHeight() + mStreamView.getMeasuredHeight();
         rootView.setLayoutParams(p1);
 
         ObjectAnimator m1 = ObjectAnimator.ofFloat(rootView, "translationY", 0, -mStreamView.getMeasuredHeight());
@@ -705,7 +704,7 @@ public class ChannelDetailFragment extends Fragment {
 
     public int preferredQualityOrBest(HashMap<String, String> q) {
         final String qa[] = q.keySet().toArray(new String[q.size()]);
-        String pref = mPreferences.getString(TWITCH_PREFERRED_VIDEO_QUALITY,"");
+        String pref = mPreferences.getString(Preferences.TWITCH_PREFERRED_VIDEO_QUALITY,"");
         int iPref = qualityValue(pref);
 
         for (int i = 0; i < qa.length; i++) {
@@ -718,7 +717,7 @@ public class ChannelDetailFragment extends Fragment {
 
     public String preferredQualityOrWorse(HashMap<String, String> q) {
         final String qa[] = q.keySet().toArray(new String[q.size()]);
-        String pref = mPreferences.getString(TWITCH_PREFERRED_VIDEO_QUALITY,"");
+        String pref = mPreferences.getString(Preferences.TWITCH_PREFERRED_VIDEO_QUALITY,"");
         int iPref = qualityValue(pref);
 
         int bestQ = -1;
@@ -773,18 +772,18 @@ public class ChannelDetailFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mQualitySelected = which;
-                        Toast.makeText(getActivity(), "" + which, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), "" + which, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setPositiveButton("Play", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getActivity(),""+ mQualitySelected,Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(),""+ mQualitySelected,Toast.LENGTH_SHORT).show();
                         playStream(q.get(qualities[mQualitySelected]));
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getActivity(),""+ mQualitySelected,Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(),""+ mQualitySelected,Toast.LENGTH_SHORT).show();
                     }
                 });
         builder.create();

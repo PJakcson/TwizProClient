@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import com.twizproclient.MainActivity;
 import com.twizproclient.R;
 import com.twizproclient.adapter.ChannelListAdapter;
 import com.twizproclient.data.async_tasks.TwitchJSONDataThread;

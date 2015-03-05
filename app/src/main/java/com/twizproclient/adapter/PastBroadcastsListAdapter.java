@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ import com.twizproclient.data.TwitchNetworkTasks;
 import com.twizproclient.data.primitives.TwitchVideo;
 import com.twizproclient.ui_fragments.ChannelDetailFragment;
 
-public class PastBroadcastsListAdapter2 extends BaseAdapter {
+public class PastBroadcastsListAdapter extends BaseAdapter {
     private final static int IS_HEADER = 0;
     private final static int IS_HIGHLIGHT_HEADER = 1;
     private final static int IS_HIGHLIGHT = 2;
@@ -41,7 +42,7 @@ public class PastBroadcastsListAdapter2 extends BaseAdapter {
     private int mWidth;
     private ViewGroup.LayoutParams mParams;
 
-    public PastBroadcastsListAdapter2(ChannelDetailFragment c) {
+    public PastBroadcastsListAdapter(ChannelDetailFragment c) {
         mActivity = c.getActivity();
         mFragment = c;
         mHighlights = new ArrayList<>();
@@ -77,8 +78,10 @@ public class PastBroadcastsListAdapter2 extends BaseAdapter {
 
             if (mWidth == 0) {
                 mWidth = getWindowWidth();
+                float scale = 240f / 320f;
                 mParams = holder.imageView.getLayoutParams();
                 mParams.width = (int) (mWidth*0.35);
+                mParams.height = (int) (mWidth*0.35*scale);
             }
 
             if (mParams.width > 0) {

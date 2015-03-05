@@ -7,6 +7,7 @@
     <integer name="channel_list_update_items">40</integer>
     <integer name="channel_list_update_threshold">15</integer>
 
+    <color name="twitch_main">#6441a5</color>
     <color name="state_checked">#ffa9a9a9</color>
     <color name="state_activated">#FFD0D0D0</color>
 </resources>

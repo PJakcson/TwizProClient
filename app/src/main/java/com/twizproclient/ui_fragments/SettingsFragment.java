@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -25,6 +26,7 @@ import org.json.JSONObject;
 
 import com.twizproclient.MainActivity;
 import com.twizproclient.R;
+import com.twizproclient.data.Preferences;
 import com.twizproclient.data.TwitchNetworkTasks;
 
 
@@ -32,20 +34,8 @@ import com.twizproclient.data.TwitchNetworkTasks;
  * Created by marc on 27.01.2015. Gridview of available games
  */
 public class SettingsFragment extends Fragment {
-
-    private static final String PREF_USER_COMPLETED_SETUP = "user_completed_setup";
-    private static String USER_AUTH_TOKEN = "user_auth_token";
-    private static String USER_IS_AUTHENTICATED = "user_is_authenticated";
-    private static String SCOPES_OF_USER = "scopes_of_user";
-    private static String USER_HAS_TWITCH_USERNAME = "user_has_twitch_username";
-    private static String TWITCH_USERNAME = "twitch_username";
-    private static String TWITCH_DISPLAY_USERNAME = "twitch_display_username";
-    private static String TWITCH_STREAM_QUALITY_TYPE = "settings_stream_quality_type";
-    private static String TWITCH_PREFERRED_VIDEO_QUALITY = "settings_preferred_video_quality";
-    private static String TWITCH_BITMAP_QUALITY = "settings_bitmap_quality";
-
-    private LinearLayout mQualityLayout, mPreferredQualityLayout, mUsernameLayout, mTwitchLoginLayout, mRefreshTokenLayout, mThumbnailQualityLayout;
-    private TextView mQualityText, mPreferredQualityText, mUsernameText, mThumbnailQualityText;
+    private LinearLayout mQualityLayout, mPreferredQualityLayout, mUsernameLayout, mLoginStatusLayout, mTwitchLoginLayout, mRefreshTokenLayout, mThumbnailQualityLayout;
+    private TextView mQualityText, mPreferredQualityText, mLoginStatusText, mUsernameText, mThumbnailQualityText;
     private EditText mUsernameEditText;
     private SharedPreferences mPreferences;
     private int mItemSelected, mQualityTypeSelected, mPreferredQualitySelected, mBitmapQualitySelected;
@@ -69,6 +59,8 @@ public class SettingsFragment extends Fragment {
         mPreferredQualityText = (TextView) mPreferredQualityLayout.findViewById(R.id.textPreferredQualitySetting);
 
         // Twitch Settings
+        mLoginStatusLayout = (LinearLayout) rootView.findViewById(R.id.settingsLoginStatus);
+        mLoginStatusText = (TextView) mLoginStatusLayout.findViewById(R.id.textLoginStatus);
         mUsernameLayout = (LinearLayout) rootView.findViewById(R.id.usernameSetting);
         mUsernameText = (TextView) mUsernameLayout.findViewById(R.id.textUsernameSetting);
         mTwitchLoginLayout = (LinearLayout) rootView.findViewById(R.id.twitchLoginSetting);
@@ -78,23 +70,14 @@ public class SettingsFragment extends Fragment {
         mThumbnailQualityLayout = (LinearLayout) rootView.findViewById(R.id.thumbnailSetting);
         mThumbnailQualityText = (TextView) mThumbnailQualityLayout.findViewById(R.id.textThumbnailQuality);
 
-
         // Set initial values
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        mQualityTypeSelected = getTypeIndex(mPreferences.getString(TWITCH_STREAM_QUALITY_TYPE, ""));
-        mPreferredQualitySelected = getPrefQualityIndex(mPreferences.getString(TWITCH_PREFERRED_VIDEO_QUALITY, ""));
-        mBitmapQualitySelected = getBitmapQualityIndex(mPreferences.getString(TWITCH_BITMAP_QUALITY, ""));
+        mQualityTypeSelected = getTypeIndex(mPreferences.getString(Preferences.TWITCH_STREAM_QUALITY_TYPE, ""));
+        mPreferredQualitySelected = getPrefQualityIndex(mPreferences.getString(Preferences.TWITCH_PREFERRED_VIDEO_QUALITY, ""));
+        mBitmapQualitySelected = getBitmapQualityIndex(mPreferences.getString(Preferences.TWITCH_BITMAP_QUALITY, ""));
 
-        mQualityText.setText(mPreferences.getString(TWITCH_STREAM_QUALITY_TYPE, ""));
-        mPreferredQualityText.setText(mPreferences.getString(TWITCH_PREFERRED_VIDEO_QUALITY, ""));
-        mUsernameText.setText(mPreferences.getString(TWITCH_DISPLAY_USERNAME, ""));
-        mThumbnailQualityText.setText(mPreferences.getString(TWITCH_BITMAP_QUALITY, ""));
-
-        if (mPreferences.getBoolean(USER_HAS_TWITCH_USERNAME, false))
-            ((ImageView)mUsernameLayout.findViewById(R.id.usernameStatusIcon)).setImageResource(R.drawable.ic_username_ok);
-        else
-            ((ImageView)mUsernameLayout.findViewById(R.id.usernameStatusIcon)).setImageResource(R.drawable.ic_username_fail);
+        updateTextFields();
 
         // Set Listeners
         mQualityLayout.setOnClickListener(new View.OnClickListener() {
@@ -124,7 +107,7 @@ public class SettingsFragment extends Fragment {
         mTwitchLoginLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPreferences.getBoolean(USER_HAS_TWITCH_USERNAME, false)) {
+                if (mPreferences.getBoolean(Preferences.USER_HAS_TWITCH_USERNAME, false)) {
                     newLoginDialog();
                 }
                 else {
@@ -143,8 +126,25 @@ public class SettingsFragment extends Fragment {
                 AuthFragment a = new AuthFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.container, a);
+                transaction.addToBackStack(null);
                 transaction.commit();
                 Toast.makeText(getActivity(), "refresh token", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mTwitchLoginLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPreferences.getBoolean(Preferences.USER_HAS_TWITCH_USERNAME, false)) {
+                    newLoginDialog();
+                }
+                else {
+                    SetupFragment s = new SetupFragment();
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, s);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
             }
         });
 
@@ -152,6 +152,15 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showBitmapDialog();
+            }
+        });
+
+        mLoginStatusLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mPreferences.getBoolean(Preferences.USER_IS_AUTHENTICATED, false)) {
+                    newLoginDialog();
+                }
             }
         });
 
@@ -175,7 +184,7 @@ public class SettingsFragment extends Fragment {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         mQualityText.setText(types[mQualityTypeSelected]);
-                        mPreferences.edit().putString(TWITCH_STREAM_QUALITY_TYPE, types[mQualityTypeSelected]).apply();
+                        mPreferences.edit().putString(Preferences.TWITCH_STREAM_QUALITY_TYPE, types[mQualityTypeSelected]).apply();
                         if (types[mQualityTypeSelected].equals("auto select best")) {
                             disablePrefView();
                         }
@@ -213,7 +222,7 @@ public class SettingsFragment extends Fragment {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         mPreferredQualityText.setText(qualities[mPreferredQualitySelected]);
-                        mPreferences.edit().putString(TWITCH_PREFERRED_VIDEO_QUALITY, qualities[mPreferredQualitySelected]).apply();
+                        mPreferences.edit().putString(Preferences.TWITCH_PREFERRED_VIDEO_QUALITY, qualities[mPreferredQualitySelected]).apply();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -308,14 +317,16 @@ public class SettingsFragment extends Fragment {
         } catch (JSONException e) {
             mUsernameLayout.findViewById(R.id.usernameStatusIcon).setVisibility(View.VISIBLE);
             ((ImageView)mUsernameLayout.findViewById(R.id.usernameStatusIcon)).setImageResource(R.drawable.ic_username_fail);
-            mPreferences.edit().putBoolean(USER_HAS_TWITCH_USERNAME, false).apply();
-            mPreferences.edit().putBoolean(USER_IS_AUTHENTICATED, false).apply();
+            mPreferences.edit().putBoolean(Preferences.USER_HAS_TWITCH_USERNAME, false).apply();
+            mPreferences.edit().putBoolean(Preferences.USER_IS_AUTHENTICATED, false).apply();
+            updateTextFields();
             Log.d("SetupFragment:username", "no valid username" + username);
         } catch (NullPointerException e) {
             mUsernameLayout.findViewById(R.id.usernameStatusIcon).setVisibility(View.VISIBLE);
             ((ImageView)mUsernameLayout.findViewById(R.id.usernameStatusIcon)).setImageResource(R.drawable.ic_username_fail);
-            mPreferences.edit().putBoolean(USER_HAS_TWITCH_USERNAME, false).apply();
-            mPreferences.edit().putBoolean(USER_IS_AUTHENTICATED, false).apply();
+            mPreferences.edit().putBoolean(Preferences.USER_HAS_TWITCH_USERNAME, false).apply();
+            mPreferences.edit().putBoolean(Preferences.USER_IS_AUTHENTICATED, false).apply();
+            updateTextFields();
             Log.d("SetupFragment:username", "no valid username" + username + " Nullpointer");
         }
     }
@@ -324,18 +335,18 @@ public class SettingsFragment extends Fragment {
         mUsernameLayout.findViewById(R.id.usernameStatusIcon).setVisibility(View.VISIBLE);
         ((ImageView)mUsernameLayout.findViewById(R.id.usernameStatusIcon)).setImageResource(R.drawable.ic_username_ok);
 
-        mPreferences.edit().putBoolean(USER_HAS_TWITCH_USERNAME, true).apply();
-        mPreferences.edit().putString(TWITCH_USERNAME, username).apply();
-        mPreferences.edit().putString(TWITCH_DISPLAY_USERNAME, userDisplayName).apply();
+        mPreferences.edit().putBoolean(Preferences.USER_HAS_TWITCH_USERNAME, true).apply();
+        mPreferences.edit().putString(Preferences.TWITCH_USERNAME, username).apply();
+        mPreferences.edit().putString(Preferences.TWITCH_DISPLAY_USERNAME, userDisplayName).apply();
 
-        if (username.equals(mPreferences.getString(TWITCH_USERNAME, ""))) {
-            mPreferences.edit().putBoolean(USER_IS_AUTHENTICATED, false).apply();
+        if (username.equals(mPreferences.getString(Preferences.TWITCH_USERNAME, ""))) {
+            mPreferences.edit().putBoolean(Preferences.USER_IS_AUTHENTICATED, false).apply();
             CookieManager cookieManager = CookieManager.getInstance();
             cookieManager.removeAllCookie();
             newUserDialog();
         }
 
-        mUsernameText.setText(userDisplayName);
+        updateTextFields();
     }
 
     private void showBitmapDialog() {
@@ -352,7 +363,7 @@ public class SettingsFragment extends Fragment {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         mThumbnailQualityText.setText(sizes[mBitmapQualitySelected]);
-                        mPreferences.edit().putString(TWITCH_BITMAP_QUALITY, sizes[mBitmapQualitySelected]).apply();
+                        mPreferences.edit().putString(Preferences.TWITCH_BITMAP_QUALITY, sizes[mBitmapQualitySelected]).apply();
                         ((MainActivity)getActivity()).setBitmapQuality();
                     }
                 })
@@ -372,6 +383,33 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+    }
+
+    private void updateTextFields() {
+        mQualityText.setText(mPreferences.getString(Preferences.TWITCH_STREAM_QUALITY_TYPE, ""));
+        mPreferredQualityText.setText(mPreferences.getString(Preferences.TWITCH_PREFERRED_VIDEO_QUALITY, ""));
+
+        mThumbnailQualityText.setText(mPreferences.getString(Preferences.TWITCH_BITMAP_QUALITY, ""));
+
+        if (mPreferences.getBoolean(Preferences.USER_IS_AUTHENTICATED, false)) {
+            mLoginStatusText.setText("Logged In and Authorized");
+            mUsernameText.setText(mPreferences.getString(Preferences.TWITCH_DISPLAY_USERNAME, ""));
+            ((ImageView)mLoginStatusLayout.findViewById(R.id.loginStatusIcon)).setImageResource(R.drawable.ic_login_auth);
+        }
+        else if (mPreferences.getBoolean(Preferences.USER_HAS_TWITCH_USERNAME, false)) {
+            mLoginStatusText.setText("Logged In with Username, not yet Authorized");
+            mUsernameText.setText(mPreferences.getString(Preferences.TWITCH_DISPLAY_USERNAME, ""));
+            ((ImageView)mLoginStatusLayout.findViewById(R.id.loginStatusIcon)).setImageResource(R.drawable.ic_login_user);
+        }
+        else {
+            mUsernameText.setText("No Username set");
+            mLoginStatusText.setText("Not logged in");
+        }
+
+        if (mPreferences.getBoolean(Preferences.USER_HAS_TWITCH_USERNAME, false))
+            ((ImageView)mUsernameLayout.findViewById(R.id.usernameStatusIcon)).setImageResource(R.drawable.ic_login_auth);
+        else
+            ((ImageView)mUsernameLayout.findViewById(R.id.usernameStatusIcon)).setImageResource(R.drawable.ic_username_fail);
     }
 
     private int getTypeIndex(String s) {

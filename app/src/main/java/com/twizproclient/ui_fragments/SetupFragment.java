@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import com.twizproclient.MainActivity;
 import com.twizproclient.R;
@@ -262,6 +263,7 @@ public class SetupFragment extends Fragment
         sp.edit().putBoolean(USER_HAS_TWITCH_USERNAME, true).apply();
         sp.edit().putString(TWITCH_USERNAME, username).apply();
         sp.edit().putString(TWITCH_DISPLAY_USERNAME, userDisplayName).apply();
+        ((TextView)setupComplete.findViewById(R.id.finishedText)).setText("Congratulations " + userDisplayName +"! \n Ace is now ready");
         makeSteps(1);
     }
 

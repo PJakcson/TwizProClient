@@ -62,6 +62,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="horizontal"
         android:id="@+id/screenContainer"
         android:layout_above="@id/borderButtonBar">
 
@@ -292,7 +293,7 @@
                 android:layout_below="@id/imageTwitchLogoFinished"
                 android:textSize="@dimen/abc_text_size_large_material"
                 android:gravity="center_horizontal"
-                android:text="Congratulations! \n Twirific is now ready"/>
+                android:text="Congratulations! \n Ace is now ready"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -304,7 +305,7 @@
                 android:layout_alignParentBottom="true"
                 android:textSize="@dimen/abc_text_size_medium_material"
                 android:gravity="center|bottom"
-                android:text="If your Twitch Credentials have changed, your can always edit them in settings."
+                android:text="If your Twitch Credentials have changed, you can always edit them in settings."
                 android:paddingBottom="10dp"/>
         </RelativeLayout>
 

@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
+import com.twizproclient.MainActivity;
 import com.twizproclient.R;
 import com.twizproclient.adapter.GamesAdapter;
 import com.twizproclient.data.TwitchJSONParser;

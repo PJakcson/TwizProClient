@@ -9,7 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView2" >
+        android:id="@+id/scrollView2">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                     android:layout_marginBottom="10dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="#6441a5"
-                    android:text="Video"/>
+                    android:text="@string/settings_video_headline"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -46,7 +46,7 @@
                         android:layout_marginBottom="5dp"
                         android:textColor="@color/abc_primary_text_material_light"
                         android:textSize="@dimen/abc_text_size_medium_material"
-                        android:text="Default Quality"/>
+                        android:text="@string/settings_video_type_headline"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
                         android:layout_marginBottom="5dp"
                         android:textColor="@color/abc_primary_text_material_light"
                         android:textSize="@dimen/abc_text_size_medium_material"
-                        android:text="Preferred Video Quality"/>
+                        android:text="@string/settings_video_quality_headline"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -107,7 +107,57 @@
                     android:layout_marginBottom="10dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="#6441a5"
-                    android:text="Twitch"/>
+                    android:text="@string/settings_twitch_headline"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/settingsLoginStatus"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:clickable="true"
+                    android:background="?android:attr/selectableItemBackground">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/abc_text_size_large_material"
+                        android:layout_marginBottom="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/settingsLoginStatusHeadline"
+                            android:layout_marginRight="5dp"
+                            android:layout_centerVertical="true"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/abc_primary_text_material_light"
+                            android:textSize="@dimen/abc_text_size_medium_material"
+                            android:text="@string/settings_twitch_status_headline"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/loginStatusIcon"
+                            android:layout_toRightOf="@+id/settingsLoginStatusHeadline"
+                            android:layout_centerVertical="true"
+                            android:padding="3sp"
+                            android:adjustViewBounds="true"/>
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textLoginStatus"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text=""/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#FFCCCCCC"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -133,7 +183,7 @@
                             android:gravity="center_vertical"
                             android:textColor="@color/abc_primary_text_material_light"
                             android:textSize="@dimen/abc_text_size_medium_material"
-                            android:text="Username"/>
+                            android:text="@string/settings_username_headline"/>
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -142,8 +192,7 @@
                             android:layout_toRightOf="@+id/settingsUsernameTitle"
                             android:layout_centerVertical="true"
                             android:padding="3sp"
-                            android:adjustViewBounds="true"
-                            android:src="@drawable/ic_username_ok"/>
+                            android:adjustViewBounds="true"/>
 
                         <ProgressBar
                             android:layout_width="wrap_content"
@@ -182,7 +231,7 @@
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/abc_primary_text_material_light"
                         android:textSize="@dimen/abc_text_size_medium_material"
-                        android:text="Fresh Login"/>
+                        android:text="@string/settings_fresh_login_headline"/>
 
                 </LinearLayout>
 
@@ -207,7 +256,7 @@
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/abc_primary_text_material_light"
                         android:textSize="@dimen/abc_text_size_medium_material"
-                        android:text="Refresh Token"/>
+                        android:text="@string/settings_refresh_token_headline"/>
 
                 </LinearLayout>
 
@@ -231,7 +280,7 @@
                     android:layout_marginBottom="10dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="#6441a5"
-                    android:text="General UI"/>
+                    android:text="@string/settings_general_ui_headline"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -249,7 +298,7 @@
                         android:layout_marginBottom="5dp"
                         android:textColor="@color/abc_primary_text_material_light"
                         android:textSize="@dimen/abc_text_size_medium_material"
-                        android:text="Thumbnail Quality"/>
+                        android:text="@string/settings_thumbnail_quality_headline"/>
 
                     <TextView
                         android:layout_width="wrap_content"

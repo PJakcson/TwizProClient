@@ -162,7 +162,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    private void selectItem(int position) {
+    public void selectItem(int position) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserHasCompletedSetup = sp.getBoolean(PREF_USER_COMPLETED_SETUP, false);
 
@@ -182,6 +182,14 @@ public class NavigationDrawerFragment extends Fragment {
             else
                 mCallbacks.onNavigationDrawerItemSelected(position);
         }
+    }
+
+    public void selectListItem(int position) {
+        mDrawerListView.setItemChecked(position, true);
+    }
+
+    public void deselectList(){
+        mDrawerListView.setItemChecked(mDrawerListView.getCheckedItemPosition(), false);
     }
 
     @Override
