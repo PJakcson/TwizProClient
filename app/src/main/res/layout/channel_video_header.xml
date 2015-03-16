@@ -4,28 +4,29 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/channel_banner"
+        android:id="@+id/channelBanner"
         android:layout_height="150dp"
         android:layout_width="150dp"
-        android:src="@drawable/ic_placeholder"
         android:contentDescription="@string/channel_banner_desc" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:textColor="@color/primary_text_default_material_light"
         android:text="Large Text"
         android:paddingLeft="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:layout_toRightOf="@id/channel_banner"
+        android:layout_toRightOf="@id/channelBanner"
         android:maxLines="2"
         android:id="@+id/textTitleView" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="@color/primary_text_default_material_light"
         android:text="Header"
         android:maxLines="3"
         android:paddingLeft="5dp"
@@ -36,13 +37,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="@color/primary_text_default_material_light"
         android:text="Header"
         android:paddingLeft="5dp"
         android:lines="1"
         android:layout_below="@+id/textBioView"
         android:layout_alignLeft="@+id/textTitleView"
-        android:layout_alignBottom="@+id/channel_banner"
+        android:layout_alignBottom="@+id/channelBanner"
         android:gravity="bottom"
         android:id="@+id/textViewsView" />
 </RelativeLayout>

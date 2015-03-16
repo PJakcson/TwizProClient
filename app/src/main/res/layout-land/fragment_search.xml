@@ -12,25 +12,17 @@
         android:id="@+id/search_progress"
         android:layout_centerInParent="true"/>
 
-    <ScrollView
+    <GridView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView" >
+        android:layout_height="wrap_content"
+        android:id="@+id/gameGrid"
+        android:numColumns="@integer/number_of_columns"/>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/channel_results">
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/game_results"
-                android:columnCount="3">
-            </GridLayout>
-
-        </LinearLayout>
-    </ScrollView>
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/channelGrid"
+        android:layout_below="@+id/gameGrid"
+        android:numColumns="2"/>
 
 </RelativeLayout>

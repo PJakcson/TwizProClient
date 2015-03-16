@@ -8,65 +8,67 @@
         android:id="@+id/icon"
         android:layout_height="150dp"
         android:layout_width="150dp"
+        android:layout_marginRight="5dp"
         android:contentDescription="@string/channel_banner_desc" />
+
+    <TextView
+        android:id="@+id/textLive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/icon"
+        android:layout_alignEnd="@+id/icon"
+        android:layout_alignBottom="@id/icon"
+        android:background="@color/twitch_main"
+        android:gravity="center_horizontal"
+        android:padding="3dp"
+        android:text="@string/channel_now_live"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="@color/primary_text_default_material_dark"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/firstLine"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
         android:layout_toEndOf="@id/icon"
-        android:layout_toRightOf="@id/icon"
         android:gravity="top|center_vertical"
         android:textSize="22sp"
-        android:textStyle="bold"
-        android:paddingTop="10dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="35dip"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/secondLineViewers"
-        android:gravity="end|bottom"
-        android:paddingTop="5dp"
-        android:paddingRight="5dp"
-        android:paddingEnd="5dp"
-        android:text="1231241"/>
-
-    <ImageView
-        android:layout_width="17dp"
-        android:layout_height="17dp"
-        android:paddingBottom="4dp"
-        android:paddingRight="4dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@id/secondLineViewers"
-        android:layout_toLeftOf="@id/secondLineViewers"
-        android:id="@+id/viewers_icon"
-        android:src="@drawable/ic_active_viewers"
-        android:contentDescription="@string/viewer_logo" />
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/secondLine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentEnd="false"
-        android:layout_toRightOf="@id/icon"
-        android:layout_toEndOf="@id/icon"
-        android:layout_toLeftOf="@id/viewers_icon"
-        android:layout_toStartOf="@id/viewers_icon"
-        android:ellipsize="marquee"
-        android:singleLine="false"
-        android:gravity="start|bottom"
-        android:textSize="16sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@id/firstLine"
+        android:layout_alignLeft="@id/firstLine"
         android:paddingTop="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/secondLineViewers"
+        android:gravity="end|bottom"
+        android:paddingTop="5dp"
+        android:paddingEnd="5dp"
+        android:text="1231241"/>
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingBottom="4sp"
+        android:paddingEnd="3sp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/secondLineViewers"
+        android:id="@+id/viewers_icon"
+        android:src="@drawable/ic_active_viewers"
+        android:contentDescription="@string/viewer_logo" />
 
 </RelativeLayout>

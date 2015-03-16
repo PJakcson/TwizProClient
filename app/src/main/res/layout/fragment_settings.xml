@@ -90,14 +90,13 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:background="#ff9b9b9b"/>
+                android:layout_height="8dp"
+                android:background="@drawable/gradient_top_soft"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:elevation="8dp"
                 android:layout_marginTop="20dp"
                 android:padding="10dp">
 
@@ -121,29 +120,27 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/abc_text_size_large_material"
+                        android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:id="@+id/settingsLoginStatusHeadline"
-                            android:layout_marginRight="5dp"
-                            android:layout_centerVertical="true"
-                            android:gravity="center_vertical"
+                            android:layout_marginEnd="5dp"
                             android:textColor="@color/abc_primary_text_material_light"
                             android:textSize="@dimen/abc_text_size_medium_material"
                             android:text="@string/settings_twitch_status_headline"/>
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_width="22sp"
+                            android:layout_height="wrap_content"
                             android:id="@+id/loginStatusIcon"
-                            android:layout_toRightOf="@+id/settingsLoginStatusHeadline"
-                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@+id/settingsLoginStatusHeadline"
+                            android:layout_alignBottom="@id/settingsLoginStatusHeadline"
+                            android:layout_alignTop="@id/settingsLoginStatusHeadline"
                             android:padding="3sp"
                             android:adjustViewBounds="true"/>
-
                     </RelativeLayout>
 
                     <TextView
@@ -171,34 +168,37 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/abc_text_size_large_material"
+                        android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:id="@+id/settingsUsernameTitle"
-                            android:layout_marginRight="5dp"
-                            android:layout_centerVertical="true"
-                            android:gravity="center_vertical"
+                            android:layout_marginEnd="5dp"
                             android:textColor="@color/abc_primary_text_material_light"
                             android:textSize="@dimen/abc_text_size_medium_material"
                             android:text="@string/settings_username_headline"/>
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_width="22sp"
+                            android:layout_height="wrap_content"
                             android:id="@+id/usernameStatusIcon"
-                            android:layout_toRightOf="@+id/settingsUsernameTitle"
-                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@+id/settingsUsernameTitle"
+                            android:layout_alignBottom="@+id/settingsUsernameTitle"
+                            android:layout_alignTop="@+id/settingsUsernameTitle"
                             android:padding="3sp"
+                            android:src="@drawable/ic_login_auth"
                             android:adjustViewBounds="true"/>
 
                         <ProgressBar
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_width="22sp"
+                            android:layout_height="wrap_content"
                             android:id="@+id/usernameUpdateProgress"
-                            android:layout_toRightOf="@+id/settingsUsernameTitle"
+                            android:layout_alignBottom="@+id/settingsUsernameTitle"
+                            android:layout_alignTop="@+id/settingsUsernameTitle"
+                            android:layout_toEndOf="@+id/settingsUsernameTitle"
+                            android:padding="3sp"
                             android:visibility="gone"/>
                         </RelativeLayout>
 
@@ -264,8 +264,8 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:background="#ff9b9b9b"/>
+                android:layout_height="8dp"
+                android:background="@drawable/gradient_top_soft"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -307,7 +307,44 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text=""/>
                 </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#FFCCCCCC"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/defaultHomeSetting"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/abc_primary_text_material_light"
+                        android:textSize="@dimen/abc_text_size_medium_material"
+                        android:text="@string/settings_default_home"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textDefaultHome"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text=""/>
+                </LinearLayout>
+
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@drawable/gradient_top_soft_complete"/>
 
 
         </LinearLayout>

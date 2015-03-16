@@ -8,6 +8,25 @@
     <integer name="channel_list_update_threshold">15</integer>
 
     <color name="twitch_main">#6441a5</color>
+    <color name="twitch_following_channel">#00B132</color>
     <color name="state_checked">#ffa9a9a9</color>
     <color name="state_activated">#FFD0D0D0</color>
+
+    <string-array name="chat_colors">
+        <item>#FF0000</item>
+        <item>#0000FF</item>
+        <item>#008000</item>
+        <item>#B22222</item>
+        <item>#FF7F50</item>
+        <item>#9ACD32</item>
+        <item>#FF0000</item>
+        <item>#2E8B57</item>
+        <item>#DAA520</item>
+        <item>#D2691E</item>
+        <item>#5F9EA0</item>
+        <item>#1E90FF</item>
+        <item>#FF69B4</item>
+        <item>#8A2BE2</item>
+        <item>#00FF7F</item>
+    </string-array>
 </resources>

@@ -3,15 +3,14 @@
 
     <string name="app_name">Ace</string>
     <string name="banner_ad_unit_test_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="banner_ad_unit_id">ca-app-pub-1959826266269343/9921410110</string>
+    <string name="banner_ad_unit_id">ca-app-pub-1959826266269343/8156861712</string>
 
     <string name="search_action">Search</string>
 
     <string name="title_section1">Games</string>
     <string name="title_section2">Top Channels</string>
     <string name="title_section3">Search</string>
-    <string name="title_section4">Favorites</string>
-    <string name="title_section5">Auth</string>
+    <string name="title_section4">Following</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -32,16 +31,21 @@
 
     <string name="twitch_user_following_suffix">/follows/channels?</string>
 
+    <string name="twich_chat_properties">https://api.twitch.tv/api/channels/</string>
+    <string name="twich_chat_emoticons">https://api.twitch.tv/kraken/chat/</string>
+
     <string name="twitch_search_channels">https://api.twitch.tv/kraken/search/channels?</string>
     <string name="twitch_search_streams">https://api.twitch.tv/kraken/search/streams?</string>
     <string name="twitch_search_games">https://api.twitch.tv/kraken/search/games?</string>
 
     <string name="twitch_oauth_base_url">https://api.twitch.tv/kraken?oauth_token=</string>
-    <string name="twitch_oauth_get_token_url">https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&amp;client_id=cgkxsqu4n4wwrq4enos0dyhz60bzea4&amp;redirect_uri=https://twitchbot&amp;scope=user_subscriptions</string>
+    <string name="twitch_oauth_get_token_url">https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&amp;client_id=ipstxc61gmz1b7cm74c50wa5no5qls6&amp;redirect_uri=https://acefortwitch&amp;scope=user_follows_edit+chat_login</string>
     <string name="stream_token_url">http://api.twitch.tv/api/channels/</string>
     <string name="twitch_video_token_url">https://api.twitch.tv/api/vods/</string>
     <string name="default_stream_quality_type">always ask</string>
     <string name="default_preferred_video_quality">source</string>
+
+    <string name="get_details_message">\n- click to view details</string>
 
     //-------------------------Settings------------------------------------------
     <string name="settings_video_headline">Video</string>
@@ -51,14 +55,36 @@
     <string name="settings_twitch_headline">Twitch</string>
     <string name="settings_username_headline">Username</string>
     <string name="settings_fresh_login_headline">Fresh Login</string>
-    <string name="settings_refresh_token_headline">Refresh Token</string>
+    <string name="settings_refresh_token_headline">Quick Twitch Login</string>
 
     <string name="settings_general_ui_headline">General UI</string>
     <string name="settings_thumbnail_quality_headline">Thumbnail Quality</string>
     <string name="settings_twitch_status_headline">Twitch Login Status</string>
+    <string name="settings_default_home">Default Homescreen</string>
+    <string name="channel_now_live">NOW LIVE</string>
+    <string name="title_settings">Settings</string>
+    <string name="join_chat_text">Join Chat</string>
+    <string name="joined_chatroom">Successfully Joined Chat</string>
+    <string name="user_not_authenticated">Please connect your Twitch Account under Settings</string>
+    <string name="skip_button">Skip</string>
+    <string name="next_button">Next</string>
+    <string name="setup_welcome">Welcome!</string>
+    <string name="setup_welcome_infos">You can now connect your Twitch Account to use the Chat and view your followed Channels</string>
+    <string name="fetching_emoticons">fetching emoticons</string>
+    <string name="connecting_to_chat">connecting to chat</string>
+    <string name="login_successful">login was successful</string>
+    <string name="username_not_set">Please set up a valid Twitch Username</string>
+    <string name="drawer_live_channels_header">Your Live Channels</string>
 
 
     //-----------------------Array-----------------------------------------------
+    <string-array name="drawer_labels">
+        <item>Games</item>
+        <item>Top Channels</item>
+        <item>Search</item>
+        <item>Following</item>
+    </string-array>
+
     <string-array name="drawer_urls">
         <item>https://api.twitch.tv/kraken/games/top?</item>
         <item>https://api.twitch.tv/kraken/streams?</item>
